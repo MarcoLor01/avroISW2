@@ -27,7 +27,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Build and analyze
-        run: mvn clean verify -P jacoco-coverage
+        run: cd lang/java/avro && mvn clean verify -P jacoco-coverage
 
       - name: Save JaCoCo report
         uses: actions/upload-artifact@v3

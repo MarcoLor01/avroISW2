@@ -37,7 +37,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn clean verify -P pit-mutation
+        run: cd lang/java/avro && mvn clean verify -P PitMutationTesting
 
       - name: Save PIT report
         uses: actions/upload-artifact@v3
