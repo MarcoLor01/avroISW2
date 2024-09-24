@@ -7,8 +7,8 @@ public class TestBinaryMessageEncoding {
 
   @Test
   public void dummyTest(){
-    int a=1;
-    int b=2;
-    Assert.assertEquals(3, a+b);
+    int a=2;
+    int b=10;
+    Assert.assertEquals(12, a+b);
   }
 }
