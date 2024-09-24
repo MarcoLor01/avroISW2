@@ -70,27 +70,30 @@
     <javacc-plugin.version>3.0.3</javacc-plugin.version>
     <javacc.version>7.0.13</javacc.version>
     <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
+
   </properties>
 
   <modules>
-    <module>android</module>
+    <!--    <module>android</module> -->
     <module>avro</module>
-    <module>idl</module>
-    <module>compiler</module>
-    <module>maven-plugin</module>
-    <module>ipc</module>
-    <module>ipc-jetty</module>
-    <module>ipc-netty</module>
-    <module>trevni</module>
-    <module>tools</module>
-    <module>mapred</module>
-    <module>protobuf</module>
-    <module>thrift</module>
-    <module>archetypes</module>
-    <module>grpc</module>
-    <module>integration-test</module>
-    <module>perf</module>
-    <module>interop-data-test</module>
+    <!--    <module>idl</module>
+        <module>compiler</module>
+        <module>maven-plugin</module>
+        <module>ipc</module>
+        <module>ipc-jetty</module>
+        <module>ipc-netty</module>
+        <module>trevni</module>
+        <module>tools</module>
+        <module>mapred</module>
+        <module>protobuf</module>
+        <module>thrift</module>
+        <module>archetypes</module>
+        <module>grpc</module>
+        <module>integration-test</module>
+        <module>perf</module>
+        <module>interop-data-test</module>
+    -->
+    <!-- Possibly add here other modules that you may need in order to generate the report with Jacoco -->
   </modules>
 
   <build>
@@ -99,6 +102,7 @@
       parameters if the plugins are used by child projects -->
     <pluginManagement>
       <plugins>
+
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
@@ -162,17 +166,18 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>${maven-surefire-plugin.version}</version>
+          <!--Removed in order to ease the integration with Jacoco -->
+          <!--<version>${maven-surefire-plugin.version}</version>
           <configuration>
             <includes>
-              <!-- Avro naming convention for JUnit tests -->
+              &lt;!&ndash; Avro naming convention for JUnit tests &ndash;&gt;
               <include>**/Test**</include>
             </includes>
             <excludes>
-              <!-- A few inner classes are not to be tested -->
+              &lt;!&ndash; A few inner classes are not to be tested &ndash;&gt;
               <exclude>**/*$*</exclude>
-              <!-- exclude the generated classes under apache.avro.test, some of
-                these match **/Test** and are not JUnit tests -->
+              &lt;!&ndash; exclude the generated classes under apache.avro.test, some of
+                these match **/Test** and are not JUnit tests &ndash;&gt;
               <exclude>**/apache/avro/test/**</exclude>
             </excludes>
             <enableAssertions>false</enableAssertions>
@@ -180,20 +185,20 @@
             <runOrder>random</runOrder>
             <parallel>all</parallel>
             <useUnlimitedThreads>true</useUnlimitedThreads>
-            <!--<perCoreThreadCount>true</perCoreThreadCount>-->
+            &lt;!&ndash;<perCoreThreadCount>true</perCoreThreadCount>&ndash;&gt;
 
-            <!-- TestSpecificCompiler instantiates a Java compiler to test output results,
+            &lt;!&ndash; TestSpecificCompiler instantiates a Java compiler to test output results,
                  this does not work with a manifest-only-jar to set the classpath for the javac.
                  This may cause problems on some platforms.
                  See https://maven.apache.org/plugins/maven-surefire-plugin/examples/class-loading.html
-                 for more information. -->
+                 for more information. &ndash;&gt;
             <useManifestOnlyJar>false</useManifestOnlyJar>
-            <!-- configures unit test standard error and standard out to go to a file per test
-                 rather than the console. -->
+            &lt;!&ndash; configures unit test standard error and standard out to go to a file per test
+                 rather than the console. &ndash;&gt;
             <redirectTestOutputToFile>true</redirectTestOutputToFile>
             <failIfNoTests>false</failIfNoTests>
             <argLine>-Xmx1000m</argLine>
-          </configuration>
+          </configuration>-->
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -311,12 +316,13 @@
         <artifactId>spotless-maven-plugin</artifactId>
         <configuration>
           <java>
-            <eclipse>
-              <!-- Avro uses Sun's java code style conventions with 2 spaces, this is a modified version of
-                   the eclipse formatter -->
+            <!-- Removed in order to ease the build, these steps are not necessary within the our ISW2 course -->
+            <!--<eclipse>
+              &lt;!&ndash; Avro uses Sun's java code style conventions with 2 spaces, this is a modified version of
+                   the eclipse formatter &ndash;&gt;
               <file>${main.basedir}/lang/java/eclipse-java-formatter.xml</file>
               <version>4.19</version>
-            </eclipse>
+            </eclipse>-->
             <!-- Temporarily disabled for JDK 16+ builds -->
             <!--<removeUnusedImports/>-->
             <replaceRegex>
