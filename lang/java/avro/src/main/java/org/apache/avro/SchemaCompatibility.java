@@ -101,6 +101,7 @@ public class SchemaCompatibility {
     return reader.getAliases().contains(writer.getFullName());
   }
 
+
   /**
    * Identifies the writer field that corresponds to the specified reader field.
    *
