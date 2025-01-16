@@ -26,21 +26,6 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Create toolchains.xml for JDK 8
-        run: |
-          mkdir -p ~/.m2
-          echo '<toolchains>
-            <toolchain>
-              <type>jdk</type>
-              <provides>
-                <version>8</version>
-              </provides>
-              <configuration>
-                <jdkHome>${{ env.JAVA_HOME }}</jdkHome>
-              </configuration>
-            </toolchain>
-          </toolchains>' > ~/.m2/toolchains.xml
-
       - name: Clone and build ba-dua repository
         run: |
           git clone https://github.com/saeg/ba-dua
