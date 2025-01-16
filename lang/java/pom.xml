@@ -163,10 +163,10 @@
             </archive>
           </configuration>
         </plugin>
-        <plugin>
+        <!--plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <!--Removed in order to ease the integration with Jacoco -->
+          <Removed in order to ease the integration with Jacoco -->
           <!--<version>${maven-surefire-plugin.version}</version>
           <configuration>
             <includes>
@@ -198,8 +198,8 @@
             <redirectTestOutputToFile>true</redirectTestOutputToFile>
             <failIfNoTests>false</failIfNoTests>
             <argLine>-Xmx1000m</argLine>
-          </configuration>-->
-        </plugin>
+          </configuration>
+        </plugin-->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
@@ -316,7 +316,7 @@
         <artifactId>spotless-maven-plugin</artifactId>
         <configuration>
           <java>
-            <!-- Removed in order to ease the build, these steps are not necessary within the our ISW2 course -->
+            <!-- Removed in order to ease the build, not necessary within our ISW2 course -->
             <!--<eclipse>
               &lt;!&ndash; Avro uses Sun's java code style conventions with 2 spaces, this is a modified version of
                    the eclipse formatter &ndash;&gt;
@@ -488,6 +488,7 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
+
               <systemPropertyVariables>
                 <!-- avro-mapred will fail in tests on mac without this -->
                 <java.security.krb5.realm>OX.AC.UK</java.security.krb5.realm>

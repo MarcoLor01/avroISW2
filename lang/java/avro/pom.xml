@@ -44,6 +44,7 @@
       *
     </osgi.import>
     <osgi.export>org.apache.avro*;version="${project.version}"</osgi.export>
+    <ba-dua.version>0.6.0</ba-dua.version>
   </properties>
 
   <build>
@@ -164,6 +165,12 @@
       <artifactId>mockito-core</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.1</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <profiles>
@@ -202,8 +209,7 @@
         <activeByDefault>false</activeByDefault>
       </activation>
       <properties>
-        <ba-dua.version>0.6.0</ba-dua.version>
-        <argLine>-javaagent:target/dependency/ba-dua-agent-rt-${ba-dua.version}-all.jar -Doutput.file=${project.build.directory}/badua.ser</argLine>
+      <argLine>-javaagent:target/dependency/ba-dua-agent-rt-${ba-dua.version}-all.jar -Doutput.file=${project.build.directory}/badua.ser</argLine>
       </properties>
       <dependencies>
         <dependency>
