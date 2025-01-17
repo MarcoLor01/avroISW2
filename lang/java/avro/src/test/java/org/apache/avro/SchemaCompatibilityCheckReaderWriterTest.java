@@ -17,6 +17,8 @@ import static org.apache.avro.SchemaCompatibility.SchemaCompatibilityType.COMPAT
 import static org.apache.avro.SchemaCompatibility.SchemaCompatibilityType.INCOMPATIBLE;
 import static org.apache.avro.SchemaCompatibility.SchemaIncompatibilityType.*;
 import static org.apache.avro.SchemaCompatibility.checkReaderWriterCompatibility;
+import static org.apache.avro.util.UtilsMethods.getInvalidSchema;
+import static org.apache.avro.util.UtilsMethods.getRecord;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -44,7 +46,6 @@ public class SchemaCompatibilityCheckReaderWriterTest {
     return Arrays.asList(new Object[][]{
 
         //{null, null, null, NullPointerException.class},
-
         //TEST COMPATIBILI
 
         {Schema.create(NULL), Schema.create(NULL), COMPATIBLE, null, null},
@@ -92,15 +93,10 @@ public class SchemaCompatibilityCheckReaderWriterTest {
         {Schema.create(STRING), getInvalidSchema(), null, null, RuntimeException.class},
 
 
+
     });
   }
 
-  public static Schema getInvalidSchema() {
-
-    Schema mockSchema = mock(Schema.class);
-    when(mockSchema.getType()).thenThrow(new RuntimeException("Invalid schema: getType is not supported"));
-    return mockSchema;
-  }
 
   public static Schema getIncompatibleWriterRecord() {
     Schema intSchema = Schema.create(INT);
@@ -163,18 +159,7 @@ public class SchemaCompatibilityCheckReaderWriterTest {
     return Schema.createEnum(name, null, null, symbols);
   }
 
-  public static Schema getRecord(String name) {
 
-    Schema longSchema = Schema.create(LONG);
-
-    Schema.Field field = new Schema.Field("value", longSchema, null, null);
-    List<Schema.Field> fields = new ArrayList<>();
-    fields.add(field);
-
-    Schema schema = Schema.createRecord(name, null, null, false, fields);
-    schema.addAlias("oldRecord");
-    return schema;
-  }
 
   public static Schema getFixed(String name, int size){
     return Schema.createFixed(name, null, null, size);

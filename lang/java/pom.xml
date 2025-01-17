@@ -632,6 +632,8 @@
   <!-- dependencies defines dependencies that all child projects share. Child projects
     will inherit these dependencies directly, and can opt out if necessary with <excludes> -->
   <dependencies>
+
+    
     <dependency>
       <groupId>org.junit.vintage</groupId>
       <artifactId>junit-vintage-engine</artifactId>
