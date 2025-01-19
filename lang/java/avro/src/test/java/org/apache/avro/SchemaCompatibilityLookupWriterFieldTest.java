@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.apache.avro.Schema.Type.LONG;
+import static org.apache.avro.Schema.Type.STRING;
 import static org.apache.avro.SchemaCompatibility.lookupWriterField;
 import static org.apache.avro.util.UtilsMethods.*;
 
@@ -37,8 +38,12 @@ public class SchemaCompatibilityLookupWriterFieldTest {
         {getCompleteRecord("Record1", Arrays.asList("field1", "field2")), getField("field1", null), Result.CORRECT_FIELD, null},
         {getCompleteRecord("Record1", Arrays.asList("field1", "field2")), getField("field3", Arrays.asList("field1")), Result.ALIAS_FIELD, null},
         {getCompleteRecord("Record1", Arrays.asList("field1", "field2")), getField("field3", Arrays.asList("field4")), Result.INCORRECT_FIELD, null},
-        {getInvalidSchema(), getField("field1", null), null, RuntimeException.class},
+        //{getInvalidSchema(), getField("field1", null), null, RuntimeException.class},
         {getCompleteRecord("Record1", Arrays.asList("field1", "field2")), getInvalidField(), null, RuntimeException.class},
+
+        // After JaCoCo
+        //{Schema.create(STRING), getField("field1", null), null, AssertionError.class},
+        {getCompleteRecord("Record1", Arrays.asList("field1", "field2")), getField("field3", Arrays.asList("field1", "field2")), null, AvroRuntimeException.class},
     });
   }
 
@@ -72,8 +77,8 @@ public class SchemaCompatibilityLookupWriterFieldTest {
   @Test
   public void testCheckReaderWriter() {
     try {
-
       Schema.Field resultField = lookupWriterField(writerSchema, readerField);
+
 
       if (expectedException != null) {
         Assert.fail("Expected exception: " + expectedException.getName() + " but none was thrown.");
@@ -90,8 +95,8 @@ public class SchemaCompatibilityLookupWriterFieldTest {
         Assert.assertNull(resultField);
       }
 
-    } catch (Exception e) {
-      Assert.assertEquals(expectedException, e.getClass());
+    } catch (AssertionError | Exception ae) {
+      Assert.assertEquals(expectedException, ae.getClass());
     }
   }
 

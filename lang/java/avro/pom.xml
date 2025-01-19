@@ -302,10 +302,11 @@
             </dependencies>
             <configuration>
               <targetClasses>
-                <param>org.apache.avro.Schema</param>
+                <param>org.apache.avro.SchemaCompatibility</param>
               </targetClasses>
               <targetTests>
-                <param>org.apache.avro.TestSchema</param>
+                <param>org.apache.avro.SchemaCompatibilityCheckReaderWriterTest</param>
+                <param>org.apache.avro.SchemaCompatibilityLookupWriterFieldTest</param>
               </targetTests>
               <avoidCallsTo>
                 <avoidCallsTo>org.slf4j</avoidCallsTo>

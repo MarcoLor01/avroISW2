@@ -632,8 +632,6 @@
   <!-- dependencies defines dependencies that all child projects share. Child projects
     will inherit these dependencies directly, and can opt out if necessary with <excludes> -->
   <dependencies>
-
-    
     <dependency>
       <groupId>org.junit.vintage</groupId>
       <artifactId>junit-vintage-engine</artifactId>
@@ -647,6 +645,7 @@
       <version>${junit5.version}</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
