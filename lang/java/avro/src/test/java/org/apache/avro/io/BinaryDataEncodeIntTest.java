@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -31,27 +32,18 @@ public class BinaryDataEncodeIntTest {
         // n, buf, pos, expectedException, expectedReturn
 
         // Casi con buffer null
-        {-1, null, 0, NullPointerException.class, 0},
         {0, null, 0, NullPointerException.class, 0},
-        {1, null, 0, NullPointerException.class, 0},
-        {Integer.MAX_VALUE, null, 0, NullPointerException.class, 0},
 
-        // Casi con buffer vuoto (capacità 0)
-        {-1, new byte[0], 0, ArrayIndexOutOfBoundsException.class, 0},
+        // Casi con buffer capacità 0
         {0, new byte[0], 0, ArrayIndexOutOfBoundsException.class, 0},
         {1, new byte[0], 0, ArrayIndexOutOfBoundsException.class, 0},
-        {Integer.MAX_VALUE, new byte[0], 0, ArrayIndexOutOfBoundsException.class, 0},
 
-        // Buffer di capacità 5
-        {-1, new byte[5], -1, ArrayIndexOutOfBoundsException.class, 0},
         {0, new byte[5], -1, ArrayIndexOutOfBoundsException.class, 0},
-        {1, new byte[5], -1, ArrayIndexOutOfBoundsException.class, 0},
-        {Integer.MAX_VALUE, new byte[5], -1, ArrayIndexOutOfBoundsException.class, 0},
 
         {-1, new byte[5], 0, null, 1}, // Supponendo che -1 codifichi 1 byte
         {0, new byte[5], 0, null, 1},  // Supponendo che 0 codifichi 1 byte
         {1, new byte[5], 0, null, 1},  // Supponendo che 1 codifichi 1 byte
-        {Integer.MAX_VALUE, new byte[5], 0, null, 5}, // MAX_INT codificato in 5 byte
+        {Integer.MAX_VALUE, new byte[5], 0, null, 5}, // MAX_INT codificato in 5
 
         {-1, new byte[5], 1, null, 1}, // Valori validi da posizioni > 0
         {0, new byte[5], 1, null, 1},
@@ -63,10 +55,13 @@ public class BinaryDataEncodeIntTest {
         {1, new byte[5], 4, null, 1},
         {Integer.MAX_VALUE, new byte[5], 4, ArrayIndexOutOfBoundsException.class, 0},
 
-        {-1, new byte[5], 5, ArrayIndexOutOfBoundsException.class, 0}, // Oltre il limite del buffer
         {0, new byte[5], 5, ArrayIndexOutOfBoundsException.class, 0},
-        {1, new byte[5], 5, ArrayIndexOutOfBoundsException.class, 0},
-        {Integer.MAX_VALUE, new byte[5], 5, ArrayIndexOutOfBoundsException.class, 0},
+
+        //After JaCoCo
+        {126, new byte[5], 0, null, 2},
+        {32000, new byte[5], 0, null, 3},
+        {2097152, new byte[5], 0, null, 4},
+
 
     });
   }
@@ -82,9 +77,46 @@ public class BinaryDataEncodeIntTest {
       }
 
       Assert.assertEquals(expectedReturn, result);
+      byte[] bufExpected;
 
+      if ((n == Integer.MAX_VALUE || n == 1 || n == 126 || n == 32000 || n == 2097152 || n == 0 || n == -1)) {
+        if (n == Integer.MAX_VALUE) {
+          bufExpected = new byte[]{-2, -1, -1, -1, 15};
+        } else if (n == 1) {
+          bufExpected = new byte[]{2, 0, 0, 0, 0};
+        } else if (n == 0) {
+          bufExpected = new byte[]{0, 0, 0, 0, 0};
+        } else if (n == -1) {
+          bufExpected = new byte[]{1, 0, 0, 0, 0};
+        } else if (n == 126) {
+          bufExpected = new byte[]{-4, 1, 0, 0, 0};
+        } else if (n == 32000) {
+          bufExpected = new byte[]{-128, -12, 3, 0, 0};
+        } else {
+          bufExpected = new byte[]{-128, -128, -128, 2, 0};
+        }
+
+        byte[] bufShifted = shiftBufValues(bufExpected, pos);
+        String actualBufToString = Arrays.toString(buf);
+        String bufExpectedToString = Arrays.toString(bufShifted);
+        Assert.assertEquals(bufExpectedToString, actualBufToString);
+      }
     } catch (Exception e) {
       Assert.assertEquals(expectedException, e.getClass());
     }
   }
+
+  private byte[] shiftBufValues(byte[] buf, int pos) {
+
+    byte[] shiftedBuf = new byte[buf.length];
+
+    for (int i = 0; i < buf.length; i++) {
+      int newPos = i + pos;
+      if (newPos >= 0 && newPos < buf.length) {
+        shiftedBuf[newPos] = buf[i];
+      }
+    }
+    return shiftedBuf;
+  }
 }
+

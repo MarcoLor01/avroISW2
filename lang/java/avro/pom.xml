@@ -303,10 +303,13 @@
             <configuration>
               <targetClasses>
                 <param>org.apache.avro.SchemaCompatibility</param>
+                <param>org.apache.avro.io.BinaryData</param>
               </targetClasses>
               <targetTests>
                 <param>org.apache.avro.SchemaCompatibilityCheckReaderWriterTest</param>
                 <param>org.apache.avro.SchemaCompatibilityLookupWriterFieldTest</param>
+                <param>org.apache.avro.io.BinaryDataCompareBytesTest</param>
+                <param>org.apache.avro.io.BinaryDataEncodeIntTest</param>
               </targetTests>
               <avoidCallsTo>
                 <avoidCallsTo>org.slf4j</avoidCallsTo>

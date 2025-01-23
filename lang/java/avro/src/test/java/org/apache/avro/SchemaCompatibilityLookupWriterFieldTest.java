@@ -38,11 +38,11 @@ public class SchemaCompatibilityLookupWriterFieldTest {
         {getCompleteRecord("Record1", Arrays.asList("field1", "field2")), getField("field1", null), Result.CORRECT_FIELD, null},
         {getCompleteRecord("Record1", Arrays.asList("field1", "field2")), getField("field3", Arrays.asList("field1")), Result.ALIAS_FIELD, null},
         {getCompleteRecord("Record1", Arrays.asList("field1", "field2")), getField("field3", Arrays.asList("field4")), Result.INCORRECT_FIELD, null},
-        //{getInvalidSchema(), getField("field1", null), null, RuntimeException.class},
+        //{getInvalidSchema(), getField("field1", null), null, RuntimeException.class}, --> Problemi PIT
         {getCompleteRecord("Record1", Arrays.asList("field1", "field2")), getInvalidField(), null, RuntimeException.class},
 
         // After JaCoCo
-        //{Schema.create(STRING), getField("field1", null), null, AssertionError.class},
+        //{Schema.create(STRING), getField("field1", null), null, AssertionError.class}, --> Problemi PIT
         {getCompleteRecord("Record1", Arrays.asList("field1", "field2")), getField("field3", Arrays.asList("field1", "field2")), null, AvroRuntimeException.class},
     });
   }

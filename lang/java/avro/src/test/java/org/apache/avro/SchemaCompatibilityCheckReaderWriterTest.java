@@ -19,8 +19,6 @@ import static org.apache.avro.SchemaCompatibility.SchemaIncompatibilityType.*;
 import static org.apache.avro.SchemaCompatibility.checkReaderWriterCompatibility;
 import static org.apache.avro.util.UtilsMethods.getInvalidSchema;
 import static org.apache.avro.util.UtilsMethods.getRecord;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(Parameterized.class)
 public class SchemaCompatibilityCheckReaderWriterTest {

@@ -66,6 +66,16 @@ public class BinaryDataCompareBytesTest {
         // Caso: segmenti di lunghezza diversa
         {new byte[]{1, 2, 3, 4, 5}, 0, 4, new byte[]{1, 2, 3, 4, 5, 6, 7}, 0, 5, null, -1}, // Primo più corto
         {new byte[]{1, 2, 3, 4, 5, 6, 7}, 0, 5, new byte[]{1, 2, 3, 4, 5}, 0, 4, null, 1}, // Secondo più corto
+
+        //after JaCoCo
+        {new byte[]{1, 2, 3, 4, 5}, 0, 5, new byte[]{1, 2, 3, 4, 8}, 0, 5, null, -3},
+
+        // Primo test pit
+        {new byte[]{1, 2, 3, 4, 5, 6}, 0, 6, new byte[]{1, 2, 3, 4, 5, 6, 7}, 0, 7, null, -1}, // Primo array più corto
+
+        // Secondo test pit
+        {new byte[]{1, 2, 3, 4, 5, 6, 7}, 0, 7, new byte[]{1, 2, 3, 4, 5, 6}, 0, 6, null, 1}, // Secondo array più corto
+
     });
   }
 
