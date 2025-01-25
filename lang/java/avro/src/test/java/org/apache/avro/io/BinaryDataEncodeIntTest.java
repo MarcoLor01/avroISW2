@@ -58,10 +58,9 @@ public class BinaryDataEncodeIntTest {
         {0, new byte[5], 5, ArrayIndexOutOfBoundsException.class, 0},
 
         //After JaCoCo
-        {126, new byte[5], 0, null, 2},
+        {129, new byte[5], 0, null, 2},
         {32000, new byte[5], 0, null, 3},
-        {2097152, new byte[5], 0, null, 4},
-
+        {2097153, new byte[5], 0, null, 4},
 
     });
   }
@@ -77,9 +76,12 @@ public class BinaryDataEncodeIntTest {
       }
 
       Assert.assertEquals(expectedReturn, result);
+
+      // After pit
+
       byte[] bufExpected;
 
-      if ((n == Integer.MAX_VALUE || n == 1 || n == 126 || n == 32000 || n == 2097152 || n == 0 || n == -1)) {
+      if ((n == Integer.MAX_VALUE || n == 1 || n == 32000 || n == 2097152 || n == 0 || n == -1 || n == 129)) {
         if (n == Integer.MAX_VALUE) {
           bufExpected = new byte[]{-2, -1, -1, -1, 15};
         } else if (n == 1) {
@@ -88,10 +90,10 @@ public class BinaryDataEncodeIntTest {
           bufExpected = new byte[]{0, 0, 0, 0, 0};
         } else if (n == -1) {
           bufExpected = new byte[]{1, 0, 0, 0, 0};
-        } else if (n == 126) {
-          bufExpected = new byte[]{-4, 1, 0, 0, 0};
         } else if (n == 32000) {
           bufExpected = new byte[]{-128, -12, 3, 0, 0};
+        } else if (n == 129) {
+          bufExpected = new byte[]{-126, 2, 0, 0, 0};
         } else {
           bufExpected = new byte[]{-128, -128, -128, 2, 0};
         }

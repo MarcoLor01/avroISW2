@@ -219,7 +219,9 @@
       </activation>
       <properties>
         <argLine>
-          -javaagent:target/dependency/ba-dua-agent-rt-${ba-dua.version}-all.jar -Doutput.file=${project.build.directory}/badua.ser
+          -javaagent:target/dependency/ba-dua-agent-rt-${ba-dua.version}-all.jar -Doutput.file=target/badua.ser
+
+          --add-opens java.base/jdk.internal.reflect=ALL-UNNAMED
         </argLine>
       </properties>
       <dependencies>

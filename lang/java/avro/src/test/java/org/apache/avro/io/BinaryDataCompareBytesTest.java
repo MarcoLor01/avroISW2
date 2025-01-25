@@ -38,30 +38,30 @@ public class BinaryDataCompareBytesTest {
         // b1, s1, l1, b2, s2, l2, expectedException, expectedResult
 
         // Caso: b1 o b2 null
-        {null, 0, 1, "test1".getBytes(), 0, 1, NullPointerException.class, 0},
-        {"test1".getBytes(), 0, 1, null, 0, 1, NullPointerException.class, 0},
+        {null, 0, 1, new byte[]{1, 2, 3, 4, 5}, 0, 1, NullPointerException.class, 0},
+        {new byte[]{1, 2, 3, 4, 5}, 0, 1, null, 0, 1, NullPointerException.class, 0},
 
         // Caso: b1 o b2 vuoti
-        {new byte[0], 0, 1, "test1".getBytes(), 0, 1, ArrayIndexOutOfBoundsException.class, 0},
-        {"test1".getBytes(), 0, 1, new byte[0], 0, 1, ArrayIndexOutOfBoundsException.class, 0},
+        {new byte[0], 0, 1, new byte[]{1, 2, 3, 4, 5}, 0, 1, ArrayIndexOutOfBoundsException.class, 0},
+        {new byte[]{1, 2, 3, 4, 5}, 0, 1, new byte[0], 0, 1, ArrayIndexOutOfBoundsException.class, 0},
 
         // Caso: s1 o s2 = -1
-        {"test1".getBytes(), -1, 1, "test1".getBytes(), 0, 1, ArrayIndexOutOfBoundsException.class, 0},
-        {"test1".getBytes(), 0, 1, "test1".getBytes(), -1, 1, ArrayIndexOutOfBoundsException.class, 0},
+        {new byte[]{1, 2, 3, 4, 5}, -1, 1, new byte[]{1, 2, 3, 4, 5}, 0, 1, ArrayIndexOutOfBoundsException.class, 0},
+        {new byte[]{1, 2, 3, 4, 5}, 0, 1, new byte[]{1, 2, 3, 4, 5}, -1, 1, ArrayIndexOutOfBoundsException.class, 0},
 
         // Caso: l1 o l2 = -1
-        //{"test1".getBytes(), 0, -1, "test1".getBytes(), 0, 1, ArrayIndexOutOfBoundsException.class, 0}, --> Non lancia eccezioni
-        //{"test1".getBytes(), 0, 1, "test1".getBytes(), 0, -1, ArrayIndexOutOfBoundsException.class, 0}, --> Non lancia eccezioni
+        //{new byte[]{1, 2, 3, 4, 5}, 0, -1, new byte[]{1, 2, 3, 4, 5}, 0, 1, ArrayIndexOutOfBoundsException.class, 0}, --> Non lancia eccezioni
+        //{new byte[]{1, 2, 3, 4, 5}, 0, 1, new byte[]{1, 2, 3, 4, 5}, 0, -1, ArrayIndexOutOfBoundsException.class, 0}, --> Non lancia eccezioni
 
         // Caso: s1 o s2 uguali alla lunghezza
-        {"test1".getBytes(), 5, 1, "test1".getBytes(), 0, 1, ArrayIndexOutOfBoundsException.class, 0},
-        {"test1".getBytes(), 0, 1, "test1".getBytes(), 5, 1, ArrayIndexOutOfBoundsException.class, 0},
+        {new byte[]{1, 2, 3, 4, 5}, 5, 1, new byte[]{1, 2, 3, 4, 5}, 0, 1, ArrayIndexOutOfBoundsException.class, 0},
+        {new byte[]{1, 2, 3, 4, 5}, 0, 1, new byte[]{1, 2, 3, 4, 5}, 5, 1, ArrayIndexOutOfBoundsException.class, 0},
 
         // Caso: l1 o l2 eccedono la lunghezza massima
-        //{"test1".getBytes(), 0, 6, "test1".getBytes(), 0, 1, ArrayIndexOutOfBoundsException.class, 0}, --> Nessuna eccezione sollevata
-        //{"test1".getBytes(), 0, 1, "test1".getBytes(), 0, 6, ArrayIndexOutOfBoundsException.class, 0}, --> Nessuna eccezione sollevata
+        //{new byte[]{1, 2, 3, 4, 5}, 0, 6, new byte[]{1, 2, 3, 4, 5}, 0, 1, ArrayIndexOutOfBoundsException.class, 0}, --> Nessuna eccezione sollevata
+        //{new byte[]{1, 2, 3, 4, 5}, 0, 1, new byte[]{1, 2, 3, 4, 5}, 0, 6, ArrayIndexOutOfBoundsException.class, 0}, --> Nessuna eccezione sollevata
 
-        {new byte[]{1, 2, 3, 4, 5, 6, 7}, 1, 3, new byte[]{1, 2, 3, 4, 5, 6, 7}, 1, 3, null, 0}, // Segmenti uguali
+        {new byte[]{1, 2, 3, 4, 5}, 1, 3, new byte[]{1, 2, 3, 4, 5}, 1, 3, null, 0}, // Segmenti uguali
 
         // Caso: segmenti di lunghezza diversa
         {new byte[]{1, 2, 3, 4, 5}, 0, 4, new byte[]{1, 2, 3, 4, 5, 6, 7}, 0, 5, null, -1}, // Primo più corto
