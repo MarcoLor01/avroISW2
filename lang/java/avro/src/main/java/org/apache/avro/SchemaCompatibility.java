@@ -33,6 +33,7 @@ import org.apache.avro.Schema.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
  * Evaluate the compatibility between a reader schema and a writer schema. A
  * reader and a writer schema are declared compatible if all datum instances of
@@ -58,25 +59,31 @@ public class SchemaCompatibility {
    * @return a result object identifying any compatibility errors.
    */
   public static SchemaPairCompatibility checkReaderWriterCompatibility(final Schema reader, final Schema writer) {
+    LOG.info("1. Def di: reader, writer");
     final SchemaCompatibilityResult compatibility = new ReaderWriterCompatibilityChecker().getCompatibility(reader,
         writer);
-
+    LOG.info("2. Def di: compatibility, use di: reader, writer");
     final String message;
+    LOG.info("3. Def di message");
+    LOG.info("4. Use di compatibility");
     switch (compatibility.getCompatibility()) {
     case INCOMPATIBLE: {
       message = String.format(
           "Data encoded using writer schema:%n%s%n" + "will or may fail to decode using reader schema:%n%s%n",
           writer.toString(true), reader.toString(true));
+      LOG.info("5. Def di message, use di writer, reader");
       break;
     }
     case COMPATIBLE: {
+      LOG.info("6. Def di message");
       message = READER_WRITER_COMPATIBLE_MESSAGE;
       break;
     }
     default:
+      LOG.info("7. Use di compatibility");
       throw new AvroRuntimeException("Unknown compatibility: " + compatibility);
     }
-
+    LOG.info("8. Use di compatibility, reader, writer, message");
     return new SchemaPairCompatibility(compatibility, reader, writer, message);
   }
 
@@ -115,24 +122,40 @@ public class SchemaCompatibility {
    * @return the writer field, if any does correspond, or None.
    */
   public static Field lookupWriterField(final Schema writerSchema, final Field readerField) {
+    LOG.info("1. def di writerSchema, readerField\n");
+    LOG.info("2. use di writerSchema");
     assert (writerSchema.getType() == Type.RECORD);
     final List<Field> writerFields = new ArrayList<>();
+    LOG.info("3. Def di writerFields");
     final Field direct = writerSchema.getField(readerField.name());
+    LOG.info("4. Def di direct\n");
+    LOG.info("5. Use di writerSchema, readerField, direct");
     if (direct != null) {
+      LOG.info("6. Def di writerFields\n");
+      LOG.info("7. Use di direct\n");
       writerFields.add(direct);
     }
     for (final String readerFieldAliasName : readerField.aliases()) {
+      LOG.info("8. Def di readerFieldAliasName\n");
+      LOG.info("9. Use di readerField");
       final Field writerField = writerSchema.getField(readerFieldAliasName);
+      LOG.info("10. Def di writerField\n");
+      LOG.info("11. Use di writerSchema, readerFieldAliasName, writerField");
       if (writerField != null) {
+        LOG.info("12. Def di writerFields\n");
+        LOG.info("13. Use di writerField");
         writerFields.add(writerField);
       }
     }
+    LOG.info("14. Use di writerFields");
     switch (writerFields.size()) {
     case 0:
       return null;
     case 1:
+      LOG.info("15. Use di writerFields");
       return writerFields.get(0);
     default: {
+      LOG.info("16. Use di readerField, writerSchema");
       throw new AvroRuntimeException(String.format(
           "Reader record field %s matches multiple fields in writer record schema %s", readerField, writerSchema));
     }

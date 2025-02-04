@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,6 +18,8 @@ public class BinaryDataEncodeIntTest {
   private final int pos;
   private final Class<? extends Exception> expectedException;
   private final int expectedReturn;
+  private static final Logger LOG = LoggerFactory.getLogger(BinaryDataEncodeIntTest.class);
+
 
   public BinaryDataEncodeIntTest(int n, byte[] buf, int pos, Class<? extends Exception> expectedException, int expectedReturn) {
     this.n = n;
@@ -40,17 +44,17 @@ public class BinaryDataEncodeIntTest {
 
         {0, new byte[5], -1, ArrayIndexOutOfBoundsException.class, 0},
 
-        {-1, new byte[5], 0, null, 1}, // Supponendo che -1 codifichi 1 byte
-        {0, new byte[5], 0, null, 1},  // Supponendo che 0 codifichi 1 byte
-        {1, new byte[5], 0, null, 1},  // Supponendo che 1 codifichi 1 byte
-        {Integer.MAX_VALUE, new byte[5], 0, null, 5}, // MAX_INT codificato in 5
+        {-1, new byte[5], 0, null, 1},
+        {0, new byte[5], 0, null, 1},
+        {1, new byte[5], 0, null, 1},
+        {Integer.MAX_VALUE, new byte[5], 0, null, 5},
 
-        {-1, new byte[5], 1, null, 1}, // Valori validi da posizioni > 0
+        {-1, new byte[5], 1, null, 1},
         {0, new byte[5], 1, null, 1},
         {1, new byte[5], 1, null, 1},
         {Integer.MAX_VALUE, new byte[5], 1, ArrayIndexOutOfBoundsException.class, 0},
 
-        {-1, new byte[5], 4, null, 1}, // Test al limite del buffer (pos = 4)
+        {-1, new byte[5], 4, null, 1},
         {0, new byte[5], 4, null, 1},
         {1, new byte[5], 4, null, 1},
         {Integer.MAX_VALUE, new byte[5], 4, ArrayIndexOutOfBoundsException.class, 0},
@@ -69,6 +73,8 @@ public class BinaryDataEncodeIntTest {
   @Test
   public void testEncodeInt() {
     try {
+      LOG.info("------------------- New Test --------------------\n");
+
       int result = BinaryData.encodeInt(n, buf, pos);
 
       if (expectedException != null) {
@@ -102,6 +108,7 @@ public class BinaryDataEncodeIntTest {
         String actualBufToString = Arrays.toString(buf);
         String bufExpectedToString = Arrays.toString(bufShifted);
         Assert.assertEquals(bufExpectedToString, actualBufToString);
+
       }
     } catch (Exception e) {
       Assert.assertEquals(expectedException, e.getClass());

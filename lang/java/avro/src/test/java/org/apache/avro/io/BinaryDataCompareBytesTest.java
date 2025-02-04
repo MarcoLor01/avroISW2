@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -11,14 +13,15 @@ import java.util.Collection;
 @RunWith(Parameterized.class)
 public class BinaryDataCompareBytesTest {
 
-  private byte[] b1;
-  private int s1;
-  private int l1;
-  private byte[] b2;
-  private int s2;
-  private int l2;
-  private Class<? extends Exception> expectedException;
-  private int expectedResult;
+  private final byte[] b1;
+  private final int s1;
+  private final int l1;
+  private final byte[] b2;
+  private final int s2;
+  private final int l2;
+  private final Class<? extends Exception> expectedException;
+  private final int expectedResult;
+  private static final Logger LOG = LoggerFactory.getLogger(BinaryDataCompareBytesTest.class);
 
   public BinaryDataCompareBytesTest(byte[] b1, int s1, int l1, byte[] b2, int s2, int l2, Class<? extends Exception> expectedException, int expectedReturn) {
     this.b1 = b1;
@@ -83,6 +86,7 @@ public class BinaryDataCompareBytesTest {
   public void testCompareBytes() {
 
     try {
+        LOG.info("-------------New Test--------------");
         int result = BinaryData.compareBytes(b1, s1, l1, b2, s2, l2);
 
         if (expectedException != null) {

@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +13,6 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.apache.avro.Schema.Type.LONG;
-import static org.apache.avro.Schema.Type.STRING;
 import static org.apache.avro.SchemaCompatibility.lookupWriterField;
 import static org.apache.avro.util.UtilsMethods.*;
 
@@ -21,6 +22,7 @@ public class SchemaCompatibilityLookupWriterFieldTest {
   private Schema.Field readerField;
   private Result expectedResult;
   private Class<? extends Exception> expectedException;
+  private static final Logger LOG = LoggerFactory.getLogger(SchemaCompatibilityLookupWriterFieldTest.class);
 
 
   public SchemaCompatibilityLookupWriterFieldTest(Schema writerSchema, Schema.Field readerField, Result expectedResult, Class<? extends Exception> expectedException) {
@@ -77,6 +79,7 @@ public class SchemaCompatibilityLookupWriterFieldTest {
   @Test
   public void testCheckReaderWriter() {
     try {
+      LOG.info("------ NEW TEST --------");
       Schema.Field resultField = lookupWriterField(writerSchema, readerField);
 
 

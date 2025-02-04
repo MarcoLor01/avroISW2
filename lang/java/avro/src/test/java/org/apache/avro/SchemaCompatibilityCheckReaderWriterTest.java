@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import java.util.ArrayList;
@@ -23,11 +25,12 @@ import static org.apache.avro.util.UtilsMethods.getRecord;
 @RunWith(Parameterized.class)
 public class SchemaCompatibilityCheckReaderWriterTest {
 
-  private Schema reader;
-  private Schema writer;
-  private SchemaCompatibility.SchemaCompatibilityType expectedCompatibilityType;
-  private SchemaCompatibility.SchemaIncompatibilityType expectedIncompatibilityType;
+  private final Schema reader;
+  private final Schema writer;
+  private final SchemaCompatibility.SchemaCompatibilityType expectedCompatibilityType;
+  private final SchemaCompatibility.SchemaIncompatibilityType expectedIncompatibilityType;
   private final Class<? extends Exception> expectedException;
+  private static final Logger LOG = LoggerFactory.getLogger(SchemaCompatibilityCheckReaderWriterTest.class);
 
   public SchemaCompatibilityCheckReaderWriterTest(Schema reader, Schema writer, SchemaCompatibility.SchemaCompatibilityType expectedCompatibilityType,
                                                   SchemaCompatibility.SchemaIncompatibilityType incompatibilityType, Class<? extends Exception> expectedException) {
@@ -167,7 +170,7 @@ public class SchemaCompatibilityCheckReaderWriterTest {
   @Test
   public void testCheckReaderWriter() {
     try {
-
+      LOG.info("------ NEW TEST --------");
       SchemaCompatibility.SchemaPairCompatibility schemaPairCompatibility = checkReaderWriterCompatibility(reader, writer);
 
       if (expectedCompatibilityType == INCOMPATIBLE) {

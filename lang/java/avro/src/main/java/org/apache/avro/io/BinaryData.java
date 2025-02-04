@@ -22,11 +22,15 @@ import java.io.IOException;
 import org.apache.avro.Schema;
 import org.apache.avro.Schema.Field;
 import org.apache.avro.AvroRuntimeException;
+import org.apache.avro.SchemaCompatibility;
 import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.util.internal.ThreadLocalWithInitial;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Utilities for binary-encoded data. */
 public class BinaryData {
+  private static final Logger LOG = LoggerFactory.getLogger(SchemaCompatibility.class);
 
   private BinaryData() {
   } // no public ctor
@@ -181,15 +185,32 @@ public class BinaryData {
    * return a positive value, if less than return a negative value.
    */
   public static int compareBytes(byte[] b1, int s1, int l1, byte[] b2, int s2, int l2) {
+
+    LOG.info("LOG1: Def di b1, s1, l1, b2, s2, l2 (parametri)");
+
     int end1 = s1 + l1;
+    LOG.info("LOG2: Def di end1 | Use di s1, l1");
+
     int end2 = s2 + l2;
+    LOG.info("LOG3: Def di end2 | Use di s2, l2");
+
     for (int i = s1, j = s2; i < end1 && j < end2; i++, j++) {
+      LOG.info("LOG4: Use di i, end1, j, end2 (condizione loop)");
+
       int a = (b1[i] & 0xff);
+      LOG.info("LOG5: Def di a | Use di i, b1");
+
       int b = (b2[j] & 0xff);
+      LOG.info("LOG6: Def di b | Use di j, b2");
+
+      LOG.info("LOG7: Use di a, b (confronto a != b)");
       if (a != b) {
+        LOG.info("LOG8: Use di a, b (return a - b)");
         return a - b;
       }
     }
+
+    LOG.info("LOG9: Use di l1, l2 (return finale)");
     return l1 - l2;
   }
 
@@ -298,7 +319,7 @@ public class BinaryData {
   /**
    * Encode a boolean to the byte array at the given position. Will throw
    * IndexOutOfBounds if the position is not valid.
-   * 
+   *
    * @return The number of bytes written to the buffer, 1.
    */
   public static int encodeBoolean(boolean b, byte[] buf, int pos) {
@@ -310,38 +331,62 @@ public class BinaryData {
    * Encode an integer to the byte array at the given position. Will throw
    * IndexOutOfBounds if it overflows. Users should ensure that there are at least
    * 5 bytes left in the buffer before calling this method.
-   * 
+   *
    * @return The number of bytes written to the buffer, between 1 and 5.
    */
   public static int encodeInt(int n, byte[] buf, int pos) {
-    // move sign to low-order bit, and flip others if negative
+    LOG.info("LOG1: Def di n, buf, pos");
     n = (n << 1) ^ (n >> 31);
+    LOG.info("LOG2: Def di n");
+    LOG.info("LOG3: Use di n");
+
     int start = pos;
+    LOG.info("LOG4: Def di start");
+    LOG.info("LOG5: Use di pos");
+
     if ((n & ~0x7F) != 0) {
+      LOG.info("LOG6: use di n");
       buf[pos++] = (byte) ((n | 0x80) & 0xFF);
       n >>>= 7;
+      LOG.info("LOG7: def di buf, di n e di pos");
+      LOG.info("LOG8: use di n, pos");
+
       if (n > 0x7F) {
+        LOG.info("LOG9: use di n");
         buf[pos++] = (byte) ((n | 0x80) & 0xFF);
         n >>>= 7;
+        LOG.info("LOG10: def di buf, di n e di pos");
+        LOG.info("LOG11: use di n, pos");
+
         if (n > 0x7F) {
+          LOG.info("LOG12: use di n");
           buf[pos++] = (byte) ((n | 0x80) & 0xFF);
           n >>>= 7;
+          LOG.info("LOG13: def di buf, di n e di pos");
+          LOG.info("LOG14: use di n, pos");
+
           if (n > 0x7F) {
+            LOG.info("LOG15: use di n");
             buf[pos++] = (byte) ((n | 0x80) & 0xFF);
             n >>>= 7;
+            LOG.info("LOG16: def di buf, di n e di pos");
+            LOG.info("LOG17: use di n, pos");
           }
         }
       }
     }
-    buf[pos++] = (byte) n;
-    return pos - start;
+
+    LOG.info("LOG18: def di buf e pos"); // Def: buf, pos (scrittura finale)
+    LOG.info("LOG19: use di pos, n e start"); // Use: pos, n, start (valori finali)
+    buf[pos++] = (byte) n; // Def: buf, pos; Use: n
+    return pos - start; // Use: pos, start
   }
 
   /**
    * Encode a long to the byte array at the given position. Will throw
    * IndexOutOfBounds if it overflows. Users should ensure that there are at least
    * 10 bytes left in the buffer before calling this method.
-   * 
+   *
    * @return The number of bytes written to the buffer, between 1 and 10.
    */
   public static int encodeLong(long n, byte[] buf, int pos) {
@@ -392,7 +437,7 @@ public class BinaryData {
    * Encode a float to the byte array at the given position. Will throw
    * IndexOutOfBounds if it overflows. Users should ensure that there are at least
    * 4 bytes left in the buffer before calling this method.
-   * 
+   *
    * @return Returns the number of bytes written to the buffer, 4.
    */
   public static int encodeFloat(float f, byte[] buf, int pos) {
@@ -408,7 +453,7 @@ public class BinaryData {
    * Encode a double to the byte array at the given position. Will throw
    * IndexOutOfBounds if it overflows. Users should ensure that there are at least
    * 8 bytes left in the buffer before calling this method.
-   * 
+   *
    * @return Returns the number of bytes written to the buffer, 8.
    */
   public static int encodeDouble(double d, byte[] buf, int pos) {
