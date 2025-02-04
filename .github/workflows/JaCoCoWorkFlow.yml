@@ -1,4 +1,4 @@
-name: JaCoCo Analysis
+name: JaCoCoWorkflow
 on:
   push:
     branches:
